@@ -20,7 +20,7 @@ class collect_player_info(scrapy.Spider):
   
   def __init__(self):
     try:
-      with open('dataset/players_urls.json') as f:
+      with open('./dataset/players_urls.json') as f:
         self.players = json.load(f)
       self.player_count = 0
     except IOError:

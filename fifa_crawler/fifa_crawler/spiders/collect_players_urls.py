@@ -36,6 +36,5 @@ class collect_player_url(scrapy.Spider):
     if self.count < 60:
       self.count += 60
       next_page_url = 'https://sofifa.com/players?col=oa&sort=desc&offset=' + str(self.count)
-      print(next_page_url)
       api_url = get_zenrows_api_url(next_page_url, api_key)
       yield scrapy.Request(url=api_url, callback=self.parse) 
