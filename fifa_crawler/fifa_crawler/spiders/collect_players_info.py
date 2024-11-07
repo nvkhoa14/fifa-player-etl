@@ -3,8 +3,6 @@ import json
 import parse as par
 from urllib.parse import urlencode
 
-api_key = ""
-
 def get_zenrows_api_url(url, api_key):
     params = {
         "url": url,            
@@ -17,8 +15,10 @@ def get_zenrows_api_url(url, api_key):
 
 class collect_player_info(scrapy.Spider):
   name='players_info'
-  
-  def __init__(self):
+  api_key = ""
+  def __init__(self, api_key):
+    if api_key:
+      self.api_key = api_key
     try:
       with open('./dataset/players_urls.json') as f:
         self.players = json.load(f)
@@ -29,7 +29,7 @@ class collect_player_info(scrapy.Spider):
   def start_requests(self):
     urls = ['https://sofifa.com/player/{}?units=mks'.format(self.players[self.player_count]['player_url'])]
     for url in urls:
-      api_url = get_zenrows_api_url(url, api_key)
+      api_url = get_zenrows_api_url(url, self.api_key)
       yield scrapy.Request(url = api_url, callback = self.parse)
   
   def parse(self, response):
@@ -103,5 +103,5 @@ class collect_player_info(scrapy.Spider):
       if self.player_count < len(self.players) - 1:
         self.player_count += 1
         next_page_url = 'https://sofifa.com/player/' + self.players[self.player_count]['player_url'] + '?units=mks'
-        api_url = get_zenrows_api_url(next_page_url, api_key)  
+        api_url = get_zenrows_api_url(next_page_url, self.api_key)  
         yield scrapy.Request(url=api_url, callback=self.parse) 

@@ -1,7 +1,6 @@
 import scrapy
 from urllib.parse import urlencode
 
-api_key = ""
 def get_zenrows_api_url(url, api_key):
     params = {
         "url": url,            
@@ -14,16 +13,18 @@ def get_zenrows_api_url(url, api_key):
 
 class collect_player_url(scrapy.Spider):
   name='players_urls' 
-  
-  def __init__(self):
+  api_key = ""
+  def __init__(self, api_key):
     self.count = 0
+    if api_key:
+      self.api_key = api_key
 
   def start_requests(self):
     urls = [
             'https://sofifa.com/players?col=oa&sort=desc&offset=0',
     ]
     for url in urls:
-      api_url = get_zenrows_api_url(url, api_key)
+      api_url = get_zenrows_api_url(url, self.api_key)
       yield scrapy.Request(url = api_url, callback = self.parse)
     
   
@@ -36,5 +37,5 @@ class collect_player_url(scrapy.Spider):
     if self.count < 60:
       self.count += 60
       next_page_url = 'https://sofifa.com/players?col=oa&sort=desc&offset=' + str(self.count)
-      api_url = get_zenrows_api_url(next_page_url, api_key)
+      api_url = get_zenrows_api_url(next_page_url, self.api_key)
       yield scrapy.Request(url=api_url, callback=self.parse) 
