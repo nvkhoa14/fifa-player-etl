@@ -1,4 +1,4 @@
-# FiFa player information crawler end-to-end data engineering project.
+# FIFA player information crawler end-to-end data engineering project.
 ## Introduction
 This project is an ETL(Extract, Transform, Load) pipeline using Scrapy Spider, Pandas and AWS Lambda (on processing). The pipeline will crawl data from soFIFA (https://sofifa.com/), transform it to desired format and load it into anywhere(local, AWS data store,etc.).
 
